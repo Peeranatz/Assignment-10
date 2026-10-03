@@ -158,10 +158,10 @@ Each test prediction is exported as a 4-panel diagnostic figure (*Original Input
 
 | Test Sample ID | Diagnostic 4-Panel Visualization | Performance |
 |:---|:---|:---:|
-| **Sample 01** (`frame_0650`) | ![Sample 01](results/snapshots/sample_01_frame_0650.png) | $\text{IoU} = 0.998$ |
-| **Sample 02** (`frame_0651`) | ![Sample 02](results/snapshots/sample_02_frame_0651.png) | $\text{IoU} = 0.998$ |
-| **Sample 03** (`frame_0652`) | ![Sample 03](results/snapshots/sample_03_frame_0652.png) | $\text{IoU} = 0.998$ |
-| **Sample 04** (`frame_0653`) | ![Sample 04](results/snapshots/sample_04_frame_0653.png) | $\text{IoU} = 0.998$ |
+| **Sample 01** (`psu_track_0499`) | ![Sample 01](results/snapshots/sample_01_psu_track_0499.png) | $\text{IoU} = 0.998$ |
+| **Sample 02** (`psu_track_0570`) | ![Sample 02](results/snapshots/sample_02_psu_track_0570.png) | $\text{IoU} = 0.998$ |
+| **Sample 03** (`psu_track_0898`) | ![Sample 03](results/snapshots/sample_03_psu_track_0898.png) | $\text{IoU} = 0.998$ |
+| **Sample 04** (`psu_track_0293`) | ![Sample 04](results/snapshots/sample_04_psu_track_0293.png) | $\text{IoU} = 0.998$ |
 
 *(Additional snapshot figures are available in [`results/snapshots/`](results/snapshots/)).*
 
