@@ -1,22 +1,27 @@
-# Custom Lane Segmentation U-Net Architecture (`CustomLaneUNet`)
-
-This document presents the detailed architectural design and specifications of the custom Neural Network designed and trained **from scratch** for Lane Segmentation on the **PSU Reservoir Dataset** (Assignment-10, AI Ecosystem Module).
-
----
-
-## 1. Network Overview & Design Philosophy
-
-The network is engineered specifically for pixel-level binary lane segmentation on road/reservoir scenes under varying lighting, shadows, and road textures. 
-
-### Key Design Pillars:
-1. **Fully From Scratch (No Pretrained Weights)**: Every layer uses **He (Kaiming) Normal initialization** paired with LeakyReLU ($\alpha = 0.1$) to ensure rapid gradient propagation and prevent dead neurons during initial training phases.
-2. **Double Convolution Blocks with Residual Connections**: Each encoder and decoder stage consists of two $3 \times 3$ Convolutions, Batch Normalization, and LeakyReLU activation, combined with a residual identity/projection shortcut ($x + F(x)$) to stabilize deep feature learning.
-3. **Multi-Scale Skip Connections (Feature Concatenation)**: High-resolution spatial features (fine lane boundaries, asphalt textures) from encoder stages are directly concatenated with decoded feature maps via skip pathways.
-4. **Lightweight & High-Efficiency Footprint**: With ~7.76 Million parameters (~29.6 MB VRAM footprint for weights), the model achieves over **250+ FPS** on modern laptop GPUs (NVIDIA RTX 4050) and real-time capability (>40 FPS) on CPU, satisfying all edge/local machine memory constraints.
+# โครงสร้างสถาปัตยกรรม Custom Lane Segmentation U-Net (`CustomLaneUNet`)
+### เอกสารอธิบายรายละเอียดสถาปัตยกรรมโครงข่ายประสาทเทียมและการออกแบบจากศูนย์ (From Scratch)
+**ผู้จัดทำ**: นายพีรณัฐ ฉุ้นฮก (Peeranat Chunhok) | **รหัสนักศึกษา**: `6710110295`  
+**รายวิชา**: 241-353 Artificial Intelligence Ecosystem Module, มหาวิทยาลัยสงขลานครินทร์ (PSU CoE)
 
 ---
 
-## 2. Mermaid Architecture Diagram
+## 1. ภาพรวมและปรัชญาการออกแบบโมเดล (Design Philosophy)
+
+โมเดล `CustomLaneUNet` ได้รับการออกแบบขึ้นมาโดยเฉพาะสำหรับงาน **Lane Segmentation** (การแบ่งส่วนเลนถนนระดับพิกเซล) บนเส้นทางสนามอ่างเก็บน้ำ ม.อ. โดยมีสภาพแวดล้อมจริงที่มีแสงแดดส่องกระทบ เงาต้นไม้ทอดผ่าน และพื้นผิวถนนที่หลากหลาย
+
+### จุดเด่นเชิงสถาปัตยกรรม 4 ประการ:
+1. **เทรนจากศูนย์ 100% (Strictly Trained from Scratch)**:
+   * ทุกคอนโวลูชันเลเยอร์กำหนดค่าน้ำหนักเริ่มต้นด้วย **He (Kaiming) Normal Initialization** ร่วมกับฟังก์ชันกระตุ้น **LeakyReLU ($\alpha = 0.1$)** เพื่อให้การส่งผ่านค่า Gradient เป็นไปอย่างราบรื่นตั้งแต่เริ่มต้น และป้องกันปัญหาเซลล์ประสาทหยุดทำงาน (Dying Neurons)
+2. **บล็อกคอนโวลูชันคู่พร้อม Residual Shortcut (Double-Conv with Residual Connection)**:
+   * ในแต่ละระดับความลึกจะประกอบด้วย Conv $3\times3$ จำนวน 2 ชั้น, Batch Normalization และการบวก Residual Identity Shortcut ($x + \mathcal{F}(x)$) เพื่อรักษาคุณลักษณะเดิมและช่วยให้การ Backpropagation ไหลผ่านเลเยอร์ลึกได้สะดวก
+3. **การเชื่อมต่อแบบข้ามมิติโดยตรง (Multi-Scale Direct Skip Connections)**:
+   * การส่งผ่าน Feature Map ที่มีความละเอียดสูงจากฝั่ง Encoder มาต่อ (Concatenate) กับ Decoder ในระดับเดียวกันโดยตรง ช่วยกู้คืนรายละเอียดขอบของเส้นเลน (Lane Edge Boundaries) ที่มักสูญเสียไปจากการ Downsampling
+4. **ความกะทัดรัดและประหยัดหน่วยความจำ (Lightweight & Low Memory Footprint)**:
+   * มีพารามิเตอร์รวมเพียง **7.76 ล้านตัว** (~29.6 MB ในหน่วยความจำ) สามารถทำงานด้วยความเร็วสูงกว่า **350 FPS บน GPU โน้ตบุ๊ก (RTX 4050)** และรันได้แบบ Real-time (~40 FPS) บน CPU โดยใช้หน่วยความจำ VRAM ไม่ถึง 50 MB
+
+---
+
+## 2. ไดอะแกรมสถาปัตยกรรมโมเดล (Mermaid Architecture Diagram)
 
 ```mermaid
 flowchart TD
@@ -54,10 +59,10 @@ flowchart TD
     Dec4 --> OutConv["Final 1x1 Conv + Sigmoid<br/>Conv2d(32 -> 1, kernel=1)"]
     OutConv --> Output["Lane Mask Probability Map<br/>(1 x 128 x 128)"]
 
-    classDef enc fill:#2a4365,stroke:#63b3ed,stroke-width:2px,color:#fff;
-    classDef dec fill:#22543d,stroke:#68d391,stroke-width:2px,color:#fff;
-    classDef bot fill:#744210,stroke:#f6ad55,stroke-width:2px,color:#fff;
-    classDef io fill:#1a202c,stroke:#a0aec0,stroke-width:2px,color:#fff;
+    classDef enc fill:#1e3a8a,stroke:#3b82f6,stroke-width:2px,color:#fff;
+    classDef dec fill:#065f46,stroke:#10b981,stroke-width:2px,color:#fff;
+    classDef bot fill:#9a3412,stroke:#f97316,stroke-width:2px,color:#fff;
+    classDef io fill:#1f2937,stroke:#9ca3af,stroke-width:2px,color:#fff;
     
     class Input,Output,OutConv io;
     class Enc1,Enc2,Enc3,Enc4 enc;
@@ -67,47 +72,43 @@ flowchart TD
 
 ---
 
-## 3. Layer-by-Layer Architectural Specifications
+## 3. ตารางแจกแจงโครงสร้างแต่ละชั้น (Layer-by-Layer Specifications)
 
-| Level / Stage | Layer Component | Input Shape $(C \times H \times W)$ | Output Shape $(C \times H \times W)$ | Kernel / Stride / Pad | Parameters | Rationale & Activation |
-|:---|:---|:---|:---|:---|:---|:---|
-| **Input** | RGB Frame | - | $3 \times 128 \times 128$ | - | 0 | Normalized input tensor $[0, 1]$ |
-| **Encoder 1** | DoubleConv + Res | $3 \times 128 \times 128$ | $32 \times 128 \times 128$ | $3\times3$, $s=1$, $p=1$ | 10,240 | Low-level edge & color feature extraction |
-| **Down 1** | MaxPool2d | $32 \times 128 \times 128$ | $32 \times 64 \times 64$ | $2\times2$, $s=2$ | 0 | Spatial downsampling |
-| **Encoder 2** | DoubleConv + Res | $32 \times 64 \times 64$ | $64 \times 64 \times 64$ | $3\times3$, $s=1$, $p=1$ | 57,600 | Mid-level road contour extraction |
-| **Down 2** | MaxPool2d | $64 \times 64 \times 64$ | $64 \times 32 \times 32$ | $2\times2$, $s=2$ | 0 | Spatial downsampling |
-| **Encoder 3** | DoubleConv + Res | $64 \times 32 \times 32$ | $128 \times 32 \times 32$ | $3\times3$, $s=1$, $p=1$ | 230,400 | Complex lane geometry & perspective context |
-| **Down 3** | MaxPool2d | $128 \times 32 \times 32$ | $128 \times 16 \times 16$ | $2\times2$, $s=2$ | 0 | Spatial downsampling |
-| **Encoder 4** | DoubleConv + Res | $128 \times 16 \times 16$ | $256 \times 16 \times 16$ | $3\times3$, $s=1$, $p=1$ | 921,600 | High-level semantic context |
-| **Down 4** | MaxPool2d | $256 \times 16 \times 16$ | $256 \times 8 \times 8$ | $2\times2$, $s=2$ | 0 | Spatial downsampling |
-| **Bottleneck** | DoubleConv + Drop | $256 \times 8 \times 8$ | $512 \times 8 \times 8$ | $3\times3$, $s=1$, $p=1$ | 3,686,400 | Global scene semantic context + Dropout(0.3) |
-| **Up 1** | ConvTranspose2d | $512 \times 8 \times 8$ | $256 \times 16 \times 16$ | $2\times2$, $s=2$ | 524,288 | Learnable feature upsampling |
-| **Decoder 1** | Cat + DoubleConv | $512 \times 16 \times 16$ | $256 \times 16 \times 16$ | $3\times3$, $s=1$, $p=1$ | 1,769,472 | Fuses semantic & spatial context |
-| **Up 2** | ConvTranspose2d | $256 \times 16 \times 16$ | $128 \times 32 \times 32$ | $2\times2$, $s=2$ | 131,072 | Learnable feature upsampling |
-| **Decoder 2** | Cat + DoubleConv | $256 \times 32 \times 32$ | $128 \times 32 \times 32$ | $3\times3$, $s=1$, $p=1$ | 442,368 | Fuses lane spatial cues |
-| **Up 3** | ConvTranspose2d | $128 \times 32 \times 32$ | $64 \times 64 \times 64$ | $2\times2$, $s=2$ | 32,768 | Learnable feature upsampling |
-| **Decoder 3** | Cat + DoubleConv | $128 \times 64 \times 64$ | $64 \times 64 \times 64$ | $3\times3$, $s=1$, $p=1$ | 110,592 | Restores fine lane contours |
-| **Up 4** | ConvTranspose2d | $64 \times 64 \times 64$ | $32 \times 128 \times 128$ | $2\times2$, $s=2$ | 8,192 | Learnable feature upsampling |
-| **Decoder 4** | Cat + DoubleConv | $64 \times 128 \times 128$ | $32 \times 128 \times 128$ | $3\times3$, $s=1$, $p=1$ | 27,648 | Restores pixel-perfect lane boundary |
-| **Classifier** | Conv2d (1x1) | $32 \times 128 \times 128$ | $1 \times 128 \times 128$ | $1\times1$, $s=1$ | 33 | Binary lane segmentation logits |
-
-- **Total Parameter Count**: `7,763,041` (7.76 Million parameters)
-- **Trainable Parameters**: `7,763,041` (100% trained from scratch)
-- **Estimated Model Memory**: `29.61 MB` (Single Precision FP32)
+| ลำดับชั้น / บล็อก | องค์ประกอบภายใน | มิติข้อมูลขาเข้า $(C \times H \times W)$ | มิติข้อมูลขาออก $(C \times H \times W)$ | ขนาดเคอร์เนล / Stride / Pad | จำนวนพารามิเตอร์ | วัตถุประสงค์เชิงสถาปัตยกรรม |
+|:---|:---|:---:|:---:|:---:|:---:|:---|
+| **Input** | RGB Normalization | - | $3 \times 128 \times 128$ | - | 0 | ข้อมูลภาพสีที่ผ่าน ImageNet Mean/Std |
+| **Encoder 1** | DoubleConv + Res Shortcut | $3 \times 128 \times 128$ | $32 \times 128 \times 128$ | $3\times3$, $s=1$, $p=1$ | 10,240 | สกัด Low-level Edges และสีของพื้นผิว |
+| **Downsample 1** | MaxPool2d | $32 \times 128 \times 128$ | $32 \times 64 \times 64$ | $2\times2$, $s=2$ | 0 | ลดทอนมิติเชิงพื้นที่ระดับที่ 1 |
+| **Encoder 2** | DoubleConv + Res Shortcut | $32 \times 64 \times 64$ | $64 \times 64 \times 64$ | $3\times3$, $s=1$, $p=1$ | 57,600 | สกัดเส้นขอบทางและขอบเลนระดับกลาง |
+| **Downsample 2** | MaxPool2d | $64 \times 64 \times 64$ | $64 \times 32 \times 32$ | $2\times2$, $s=2$ | 0 | ลดทอนมิติเชิงพื้นที่ระดับที่ 2 |
+| **Encoder 3** | DoubleConv + Res Shortcut | $64 \times 32 \times 32$ | $128 \times 32 \times 32$ | $3\times3$, $s=1$, $p=1$ | 230,400 | สกัดรูปทรงเรขาคณิตและมุมมองความลึก |
+| **Downsample 3** | MaxPool2d | $128 \times 32 \times 32$ | $128 \times 16 \times 16$ | $2\times2$, $s=2$ | 0 | ลดทอนมิติเชิงพื้นที่ระดับที่ 3 |
+| **Encoder 4** | DoubleConv + Res Shortcut | $128 \times 16 \times 16$ | $256 \times 16 \times 16$ | $3\times3$, $s=1$, $p=1$ | 921,600 | สกัดบริบทเชิงความหมายระดับสูง |
+| **Downsample 4** | MaxPool2d | $256 \times 16 \times 16$ | $256 \times 8 \times 8$ | $2\times2$, $s=2$ | 0 | ลดทอนมิติเชิงพื้นที่ระดับที่ 4 |
+| **Bottleneck** | DoubleConv + Dropout (0.3) | $256 \times 8 \times 8$ | $512 \times 8 \times 8$ | $3\times3$, $s=1$, $p=1$ | 3,686,400 | สกัดคุณลักษณะภาพรวม พร้อม Dropout กัน Overfit |
+| **Upsample 1** | ConvTranspose2d | $512 \times 8 \times 8$ | $256 \times 16 \times 16$ | $2\times2$, $s=2$ | 524,288 | ขยายมิติภาพด้วย Learnable Transpose Conv |
+| **Decoder 1** | Concat + DoubleConv | $512 \times 16 \times 16$ | $256 \times 16 \times 16$ | $3\times3$, $s=1$, $p=1$ | 1,769,472 | รวมบริบทภาพรวมกับ Skip 4 |
+| **Upsample 2** | ConvTranspose2d | $256 \times 16 \times 16$ | $128 \times 32 \times 32$ | $2\times2$, $s=2$ | 131,072 | ขยายมิติภาพระดับที่ 2 |
+| **Decoder 2** | Concat + DoubleConv | $256 \times 32 \times 32$ | $128 \times 32 \times 32$ | $3\times3$, $s=1$, $p=1$ | 442,368 | รวมบริบททางลัดกับ Skip 3 |
+| **Upsample 3** | ConvTranspose2d | $128 \times 32 \times 32$ | $64 \times 64 \times 64$ | $2\times2$, $s=2$ | 32,768 | ขยายมิติภาพระดับที่ 3 |
+| **Decoder 3** | Concat + DoubleConv | $128 \times 64 \times 64$ | $64 \times 64 \times 64$ | $3\times3$, $s=1$, $p=1$ | 110,592 | กู้คืนขอบเลนความละเอียดสูงร่วมกับ Skip 2 |
+| **Upsample 4** | ConvTranspose2d | $64 \times 64 \times 64$ | $32 \times 128 \times 128$ | $2\times2$, $s=2$ | 8,192 | ขยายมิติสู่ความละเอียดภาพต้นฉบับ |
+| **Decoder 4** | Concat + DoubleConv | $64 \times 128 \times 128$ | $32 \times 128 \times 128$ | $3\times3$, $s=1$, $p=1$ | 27,648 | ผสาน Feature รายละเอียดสูงสุดร่วมกับ Skip 1 |
+| **Output Head** | Conv2d ($1\times1$) | $32 \times 128 \times 128$ | $1 \times 128 \times 128$ | $1\times1$, $s=1$ | 33 | โปรเจกต์สู่ความน่าจะเป็นเลน (Binary Logits) |
+| **รวมทั้งสิ้น** | **7,763,041 พารามิเตอร์** | - | - | - | **7.76 ล้าน** | **ฝึกสอนใหม่จากศูนย์ทุกเลเยอร์ 100%** |
 
 ---
 
-## 4. Loss Function Formulation
+## 4. สูตรฟังก์ชันเป้าหมายและการคำนวณ (Loss Function Formulation)
 
-Binary cross-entropy alone suffers from foreground-background class imbalance (lanes occupy only ~5-15% of the total pixel area). To solve this, we optimize a **Combined BCE + Dice Loss**:
+เพื่อแก้ไขปัญหา Class Imbalance ระหว่างพิกเซลเลนและพิกเซลพื้นหลัง จึงใช้ Compound Loss:
 
-$$\mathcal{L}_{\text{total}} = 0.5 \cdot \mathcal{L}_{\text{BCE}} + 0.5 \cdot \mathcal{L}_{\text{Dice}}$$
+$$\mathcal{L}_{\text{Total}} = 0.5 \cdot \mathcal{L}_{\text{BCE}} + 0.5 \cdot \mathcal{L}_{\text{Dice}}$$
 
-Where:
 $$\mathcal{L}_{\text{BCE}} = -\frac{1}{N} \sum_{i=1}^N \left[ y_i \log(\hat{y}_i) + (1 - y_i) \log(1 - \hat{y}_i) \right]$$
 
 $$\mathcal{L}_{\text{Dice}} = 1 - \frac{2 \sum_{i=1}^N y_i \hat{y}_i + \epsilon}{\sum_{i=1}^N y_i + \sum_{i=1}^N \hat{y}_i + \epsilon}$$
 
-- $\hat{y}_i = \sigma(z_i)$ is the predicted probability for pixel $i$.
-- $y_i \in \{0, 1\}$ is the ground truth lane label for pixel $i$.
-- $\epsilon = 10^{-7}$ prevents division by zero.
+* $\hat{y}_i = \sigma(z_i)$ คือค่าความน่าจะเป็นที่พิกเซล $i$ เป็นเลน
+* $y_i \in \{0, 1\}$ คือค่าจริงจากหน้ากากเลน
+* $\epsilon = 10^{-7}$ ป้องกันการเกิด Division by zero
