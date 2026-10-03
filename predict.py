@@ -55,7 +55,11 @@ def run_inference_and_visualize(model, dataloader, device, output_dir="results/s
                     break
 
                 img_name = img_names[i]
-                img_rgb = (images_cpu[i].transpose(1, 2, 0) * 255).astype(np.uint8)
+                # Denormalize ImageNet normalization to recover true natural RGB colors
+                mean = np.array([0.485, 0.456, 0.406], dtype=np.float32)
+                std = np.array([0.229, 0.224, 0.225], dtype=np.float32)
+                img_denorm = (images_cpu[i].transpose(1, 2, 0) * std + mean) * 255.0
+                img_rgb = np.clip(img_denorm, 0, 255).astype(np.uint8)
                 gt_mask = (masks_cpu[i, 0] * 255).astype(np.uint8)
                 pred_prob = preds[i, 0]
                 pred_mask = ((pred_prob > threshold) * 255).astype(np.uint8)
