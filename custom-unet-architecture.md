@@ -1,7 +1,8 @@
 # โครงสร้างสถาปัตยกรรม Custom Lane Segmentation U-Net (`CustomLaneUNet`)
 ### เอกสารอธิบายรายละเอียดสถาปัตยกรรมโครงข่ายประสาทเทียมและการออกแบบจากศูนย์ (From Scratch)
 **ผู้จัดทำ**: นายพีรณัฐ ฉุ้นฮก (Peeranat Chunhok) | **รหัสนักศึกษา**: `6710110295`  
-**รายวิชา**: 241-353 Artificial Intelligence Ecosystem Module, มหาวิทยาลัยสงขลานครินทร์ (PSU CoE)
+**สาขาวิชา**: วิศวกรรมปัญญาประดิษฐ์ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยสงขลานครินทร์ (Artificial Intelligence Engineering, PSU)  
+**รายวิชา**: 241-353 Artificial Intelligence Ecosystem Module
 
 ---
 

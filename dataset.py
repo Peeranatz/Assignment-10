@@ -2,7 +2,8 @@
 dataset.py: High-performance Dataset pipeline for PSU Reservoir Lane Segmentation
 Pre-caches rasterized masks and resized images in memory for high-speed GPU training.
 Author: Peeranat Chunhok (Student ID: 6710110295)
-Course: 241-353 Artificial Intelligence Ecosystem Module, PSU CoE
+Course: 241-353 Artificial Intelligence Ecosystem Module
+Department: Artificial Intelligence Engineering, Faculty of Engineering, Prince of Songkla University
 """
 
 import os

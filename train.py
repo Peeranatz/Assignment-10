@@ -1,7 +1,8 @@
 """
 train.py: Training Pipeline for Custom Lane Segmentation Neural Network from Scratch
 Author: Peeranat Chunhok (Student ID: 6710110295)
-Course: 241-353 Artificial Intelligence Ecosystem Module, PSU CoE
+Course: 241-353 Artificial Intelligence Ecosystem Module
+Department: Artificial Intelligence Engineering, Faculty of Engineering, Prince of Songkla University
 """
 
 import argparse

@@ -7,7 +7,7 @@
 * **ชื่อ-นามสกุล**: นายพีรณัฐ ฉุ้นฮก (Peeranat Chunhok)
 * **รหัสนักศึกษา**: `6710110295`
 * **รายวิชา**: 241-353 Artificial Intelligence Ecosystem Module
-* **สาขาวิชา**: วิศวกรรมคอมพิวเตอร์ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยสงขลานครินทร์ (PSU CoE)
+* **หลักสูตร / สาขาวิชา**: วิศวกรรมปัญญาประดิษฐ์ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยสงขลานครินทร์ (Artificial Intelligence Engineering, Faculty of Engineering, PSU)
 * **อาจารย์ผู้สอน**: ดร.รัฐชัย วงศ์ธนวิจิต (Dr. Rattachai Wongtanawijit)
 * **ลิงก์ GitHub Repository**: [https://github.com/Peeranatz/Assignment-10](https://github.com/Peeranatz/Assignment-10)
 
