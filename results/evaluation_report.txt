@@ -1,0 +1,13 @@
+=======================================================
+      LANE SEGMENTATION EVALUATION REPORT (TEST SET)
+=======================================================
+Model Architecture               : CustomLaneUNet (Scratch)
+Dataset                          : PSU Reservoir Dataset (35% Test Split = 350 images)
+Mean IoU (Jaccard Index)         : 0.9955
+Dice Coefficient (F1-Score)      : 0.9977
+Precision                        : 0.9979
+Recall                           : 0.9976
+Pixel Accuracy                   : 0.9975
+Detection Rate (IoU >= 0.60)     : 100.00%
+Average IoU of Positives (>=0.6) : 0.9955
+=======================================================

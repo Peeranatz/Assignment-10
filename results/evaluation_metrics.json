@@ -1,0 +1,13 @@
+{
+    "total_test_samples": 350,
+    "mean_iou": 0.9954829160631913,
+    "std_iou": 0.012123938654248882,
+    "mean_dice_f1": 0.9976953471367613,
+    "mean_precision": 0.9978680155849461,
+    "mean_recall": 0.997587704818876,
+    "pixel_accuracy": 0.997497384201501,
+    "detection_threshold_iou": 0.6,
+    "detected_samples_count": 350,
+    "detection_rate_pct": 100.0,
+    "average_iou_detected_positives": 0.9954829160631913
+}

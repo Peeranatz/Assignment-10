@@ -1,0 +1,56 @@
+{
+    "model_architecture": "CustomLaneUNet (from scratch)",
+    "input_resolution": "128x128",
+    "parameters": {
+        "total": 7763041,
+        "trainable": 7763041,
+        "parameter_memory_mb": 29.61,
+        "checkpoint_disk_size_mb": 88.96
+    },
+    "complexity": {
+        "macs": 3033792512.0,
+        "macs_formatted": "3.034G",
+        "flops": 6067585024.0,
+        "flops_giga": 6.067585024
+    },
+    "memory_footprint": {
+        "gpu_hardware": "NVIDIA GeForce RTX 4050 Laptop GPU",
+        "vram_batch_1_mb": {
+            "vram_allocated_mb": 29.92,
+            "vram_reserved_mb": 70.0,
+            "vram_peak_mb": 44.84
+        },
+        "vram_batch_16_mb": {
+            "vram_allocated_mb": 33.67,
+            "vram_reserved_mb": 380.0,
+            "vram_peak_mb": 270.77
+        },
+        "host_process_ram_mb": 501.7
+    },
+    "latency_throughput": {
+        "gpu_batch_1": {
+            "device": "cuda",
+            "batch_size": 1,
+            "mean_latency_ms": 2.812,
+            "median_latency_ms": 2.686,
+            "std_latency_ms": 0.378,
+            "fps": 355.61
+        },
+        "gpu_batch_16": {
+            "device": "cuda",
+            "batch_size": 16,
+            "mean_latency_ms": 19.214,
+            "median_latency_ms": 19.162,
+            "std_latency_ms": 0.413,
+            "fps": 52.04
+        },
+        "cpu_batch_1": {
+            "device": "cpu",
+            "batch_size": 1,
+            "mean_latency_ms": 25.281,
+            "median_latency_ms": 24.749,
+            "std_latency_ms": 2.511,
+            "fps": 39.56
+        }
+    }
+}

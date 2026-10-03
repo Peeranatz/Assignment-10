@@ -1,0 +1,19 @@
+=================================================================
+        CUSTOMLANEUNET COMPUTATIONAL & MEMORY BENCHMARK
+=================================================================
+Model Architecture       : CustomLaneUNet (Scratch Initialization)
+Input Resolution         : 3 x 128 x 128
+Total Parameters         : 7,763,041 (7.76 M)
+Model Parameter Size     : 29.61 MB
+Checkpoint File Size     : 88.96 MB
+FLOPs (Inference)        : 6.07 GFLOPs (3.034G MACs)
+-----------------------------------------------------------------
+GPU Hardware             : NVIDIA GeForce RTX 4050 Laptop GPU
+GPU VRAM (Batch 1)       : Allocated=29.92 MB | Peak=44.84 MB
+GPU VRAM (Batch 16)      : Allocated=33.67 MB | Peak=270.77 MB
+Host Process RAM         : 501.70 MB
+-----------------------------------------------------------------
+GPU Latency (Batch 1)    : 2.81 ms (355.6 FPS)
+GPU Latency (Batch 16)   : 19.21 ms (832.6 FPS equiv)
+CPU Latency (Batch 1)    : 25.28 ms (39.6 FPS)
+=================================================================
